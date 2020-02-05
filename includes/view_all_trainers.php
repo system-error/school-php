@@ -1,3 +1,14 @@
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="search">Search User By Email</label>
+        <input type="text" name="trainer_email" class="form-control" >
+    </div>
+    <div class="form-group">
+        <input type="submit" name="search_trainer"  class="btn btn-primary" value="Search Trainer">
+    </div>
+
+</form>
+
 <table class="table table-bordered table-hover">
     <thead>
     <tr>
@@ -10,7 +21,13 @@
     <tbody >
 
     <?php
-    $query = "SELECT * FROM trainers";
+    if(isset($_POST['search_trainer'])){
+        $mail = $_POST['trainer_email'];
+        $query = "SELECT * FROM trainers where trainer_email LIKE '%" .$mail. "%'  ";
+
+    }else {
+        $query = "SELECT * FROM trainers";
+    }
     $select_trainers = mysqli_query($connection,$query);
 
     while ($row = mysqli_fetch_assoc($select_trainers) ) {

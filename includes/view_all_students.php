@@ -1,3 +1,13 @@
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="search">Search User By Name</label>
+        <input type="text" name="student_name" class="form-control" >
+    </div>
+    <div class="form-group">
+        <input type="submit" name="search_student"  class="btn btn-primary" value="Search Student">
+    </div>
+
+</form>
 
 <table class="table table-bordered table-hover">
 <thead>
@@ -11,33 +21,36 @@
 </thead>
 <tbody >
 
-    <?php
-        $query = "SELECT * FROM students";
-        $select_students = mysqli_query($connection,$query);
-    
-        while ($row = mysqli_fetch_assoc($select_students) ) {
-            $id = $row['id'];
-            $name = $row['student_name'];
-            $lastName = $row['student_lastname'];
-            $birthdate = $row['student_dirthdate'];
+<?php
+        if(isset($_POST['search_student'])){
+            $name = $_POST['student_name'];
+            $query = "SELECT * FROM students where student_name LIKE '%" .$name. "%'  ";
 
-            
-            echo "<tr>";
+        }else {
+            $query = "SELECT * FROM students";
+        }
+            $select_students = mysqli_query($connection, $query);
+            while ($row = mysqli_fetch_assoc($select_students)) {
+                $id = $row['id'];
+                $name = $row['student_name'];
+                $lastName = $row['student_lastname'];
+                $birthdate = $row['student_dirthdate'];
+                echo "<tr>";
                 echo "<td>$id</td>";
                 echo "<td>$name</td>";
                 echo "<td>$lastName</td>";
 
                 $query1 = "SELECT id_course FROM students WHERE id = {$id} ";
-                $student_course = mysqli_query($connection,$query1);
+                $student_course = mysqli_query($connection, $query1);
 
-                while ($row = mysqli_fetch_assoc($student_course) ) {
+                while ($row = mysqli_fetch_assoc($student_course)) {
                     $id = $row['id_course'];
-                 }
+                }
 
                 $query2 = "SELECT course_name FROM courses WHERE id = {$id} ";
-                $student_course = mysqli_query($connection,$query2);
+                $student_course = mysqli_query($connection, $query2);
 
-                while ($row = mysqli_fetch_assoc($student_course) ) {
+                while ($row = mysqli_fetch_assoc($student_course)) {
                     $course_name = $row['course_name'];
                 }
 
@@ -51,8 +64,14 @@
                 echo "<td>$birthdate</td>";
                 echo "<td><a href = 'students.php?source=edit_student&s_id={$id}'>Edit</a></td>";
                 echo "<td><a href = 'students.php?delete={$id}'>Delete</a></td>";
-            echo "</tr>";
-        }
+                echo "</tr>";
+            }
+
+
+
+
+
+
     ?>
 </tbody>
 </table>

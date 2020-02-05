@@ -1,3 +1,13 @@
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="search">Search User By Name</label>
+        <input type="text" name="course_name" class="form-control" >
+    </div>
+    <div class="form-group">
+        <input type="submit" name="search_course"  class="btn btn-primary" value="Search Course">
+    </div>
+
+</form>
 <table class="table table-bordered table-hover">
     <thead>
     <tr>
@@ -10,7 +20,14 @@
     <tbody >
 
     <?php
-    $query = "SELECT * FROM courses";
+    if(isset($_POST['search_course'])){
+        $course = $_POST['course_name'];
+        $query = "SELECT * FROM courses where course_name LIKE '%" .$course. "%'  ";
+
+    }else {
+        $query = "SELECT * FROM courses";
+    }
+
     $select_courses = mysqli_query($connection,$query);
 
     while ($row = mysqli_fetch_assoc($select_courses) ) {
